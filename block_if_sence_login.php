@@ -32,9 +32,10 @@ class block_if_sence_login extends block_base {
     
     public function init() {
         $this->title = get_string('pluginname', 'block_if_sence_login');
-        if(isset($_POST['CodSence'])){
-            echo '<script>console.log("aqui viene el post: '.$_POST['CodSence'].'");</script>';
-        }
+//        if(isset($_POST['CodSence'])){
+//            echo '<script>console.log("aqui viene el post: '.$_POST['CodSence'].'");</script>';
+//        }
+        //require_login();
     }
     function get_required_javascript() {
         parent::get_required_javascript();
@@ -112,8 +113,10 @@ class block_if_sence_login extends block_base {
         if ($this->content !== null) {
           return $this->content;
         }
-        $this->content         =  new stdClass;
-        $this->content->text   = $this->set_formcontent();
+        if(isloggedin()){
+            $this->content         =  new stdClass;
+            $this->content->text   = $this->set_formcontent();
+        }
         return $this->content;
     }
 }
