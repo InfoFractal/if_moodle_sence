@@ -63,9 +63,10 @@ class block_if_sence_login extends block_base {
         
         $runotec = get_config('block_if_sence_login','runotec');
         $tokenotec = get_config('block_if_sence_login','tokenotec');
-        $urlerror = get_config('block_if_sence_login','urlerror');
+        
         $courses_sence = get_courses_sence_list();
         $courses_sence_2 = get_courses_sence_list();
+        $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http")."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $text  = '<h5>Selecciona el curso que deseas</h5>';
         $text .= '<form action="https://sistemas.sence.cl/rcetest/Registro/IniciarSesion" method="post" id="form-sence">';
         $text .=    '<select id="course-selector">';
@@ -79,14 +80,16 @@ class block_if_sence_login extends block_base {
         $text .=    '<input type="hidden" value="" name="CodSence" id="cod-sence">';
         $text .=    '<input type="hidden" value="" name="CodigoCurso" id="cod-curso">';
         $text .=    '<input type="hidden" value="" name="LineaCapacitacion" id="linea-cap">';
-        $text .=    '<input type="hidden" value="" name="UrlRetoma" id="url-retoma">';
-        $text .=    '<input type="hidden" value="'.$urlerror.'" name="UrlError">';
+        $text .=    '<input type="hidden" value="'.$actual_link.'/moodle/course/view.php?id='.$course->id.'" name="UrlRetoma">';
+        $text .=    '<input type="hidden" value="'.$actual_link.'/moodle/blocks/if_sence_login/error/error.php" name="UrlError">';
         $text .=    '<input type="hidden" value="'.$runalumno.'" name="RunAlumno">';
         $text .=    '<input type="hidden" value="16" name="IdSesionAlumno"><br>';
         $text .=    '<br><input type="submit" value="Iniciar" disabled="disabled" id="submit-button">';
         $text .='</form>';
         $text .='<script>';
             $text .=    '$(document).ready(function(){';
+            $text .=    'var prot = document.location.protocol;';
+            $text .=    'var host = document.location.hostname;';
         foreach ($courses_sence_2 as $course){
             $data_course = get_data_course_by_courseid($course->id);
             $text .=        '$("[data-courseid='.$course->id.'] a").removeAttr("href");';
@@ -97,8 +100,8 @@ class block_if_sence_login extends block_base {
             $text .=                '<input type=\"hidden\" value=\"'.$course->codsence.'\" name=\"CodSence\">';
             $text .=                '<input type=\"hidden\" value=\"'.$data_course['codcurso'].'\" name=\"CodigoCurso\">';
             $text .=                '<input type=\"hidden\" value=\"'.$data_course['lineacap'].'\" name=\"LineaCapacitacion\">';
-            $text .=                '<input type=\"hidden\" value=\"'.$data_course['successurl'].'\" name=\"UrlRetoma\">';
-            $text .=                '<input type=\"hidden\" value=\"'.$urlerror.'\" name=\"UrlError\">';
+            $text .=                '<input type=\"hidden\" value=\""+prot+"//"+host+"/moodle/course/view.php?id='.$course->id.'\" name=\"UrlRetoma\">';
+            $text .=                '<input type=\"hidden\" value=\""+prot+"//"+host+"/moodle/blocks/if_sence_login/error/error.php\" name=\"UrlError\">';
             $text .=                '<input type=\"hidden\" value=\"'.$runalumno.'\" name=\"RunAlumno\">';
             $text .=                '<input type=\"hidden\" value=\"16\" name=\"IdSesionAlumno\">';
             $text .=                '<input type=\"submit\" value=\"Iniciar curso a través de SENCE\">';

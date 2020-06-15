@@ -43,21 +43,15 @@ $lineacap = $DB->get_record('customfield_data',
         ['fieldid' => $lineacapid->id,'instanceid' => intval($courseid)],
         'value');
 
-//Obtenemos id del campo personalizado 'Url Retorno'
-$successurlid = $DB->get_record('customfield_field', ['shortname' => 'successurl'],'id');
-//Obtenemos el valor del 'Url Retorno'
-$successurl = $DB->get_record('customfield_data', 
-        ['fieldid' => $successurlid->id,'instanceid' => intval($courseid)],
-        'value');
 
-//Obtenemos id del campo personalizado 'Url Retorno'
+
+//Obtenemos id del campo personalizado 'codigo curso'
 $codcursoid = $DB->get_record('customfield_field', ['shortname' => 'codcurso'],'id');
-//Obtenemos el valor del 'Url Retorno'
+//Obtenemos el valor del 'codigo curso'
 $codcurso = $DB->get_record('customfield_data', 
         ['fieldid' => $codcursoid->id,'instanceid' => intval($courseid)],
         'value');
 
 echo '$("#cod-sence").val("'.$codsence->value.'");';
 echo '$("#linea-cap").val("'.$lineacap->value.'");';
-echo '$("#url-retoma").val("'.$successurl->value.'");';
 echo '$("#cod-curso").val("'.$codcurso->value.'");';
