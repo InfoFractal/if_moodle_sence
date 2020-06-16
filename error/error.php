@@ -6,7 +6,7 @@ $PAGE->set_context(get_system_context());
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title("Error en login SENCE");
 $PAGE->set_heading("Hemos detectado un error en el login SENCE");
-$PAGE->set_url($CFG->wwwroot.'/error.php');
+$PAGE->set_url($CFG->wwwroot.'/blocks/if_sence_login/pages/error.php');
 
 $cod_error = intval($_POST['GlosaError']);
 $error_msg = "";
