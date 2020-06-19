@@ -53,7 +53,7 @@ function get_data_course_by_courseid($id){
     $result2 = $DB->get_recordset_sql($query2, ['codcurso',$id]);
     foreach($result2 as $lc2){
         $result['codcurso'] = $lc2->codcurso;
-    
+    }
     $query3 = "select cfd.value as 'successurl' from ".$dbp."course c,".$dbp."customfield_data cfd,"
             . $dbp."customfield_field cff where cff.shortname=? and cff.id = cfd.fieldid "
             . "and cfd.instanceid = c.id and cfd.value<>'' and cfd.instanceid = ?";
