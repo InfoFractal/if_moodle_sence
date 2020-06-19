@@ -63,6 +63,7 @@ class block_if_sence_login extends block_base {
         
         $runotec = get_config('block_if_sence_login','runotec');
         $tokenotec = get_config('block_if_sence_login','tokenotec');
+        $idsesionalumno = sesskey();
         
         $courses_sence = get_courses_sence_list();
         $courses_sence_2 = get_courses_sence_list();
@@ -80,10 +81,10 @@ class block_if_sence_login extends block_base {
         $text .=    '<input type="hidden" value="" name="CodSence" id="cod-sence">';
         $text .=    '<input type="hidden" value="" name="CodigoCurso" id="cod-curso">';
         $text .=    '<input type="hidden" value="" name="LineaCapacitacion" id="linea-cap">';
-        $text .=    '<input type="hidden" value="'.$actual_link.'/moodle/course/view.php?id='.$course->id.'" name="UrlRetoma">';
-        $text .=    '<input type="hidden" value="'.$actual_link.'/moodle/blocks/if_sence_login/error/error.php" name="UrlError">';
+        $text .=    '<input type="hidden" value="'.$actual_link.'/moodle/blocks/if_sence_login/pages/exito.php" name="UrlRetoma">';
+        $text .=    '<input type="hidden" value="'.$actual_link.'/moodle/blocks/if_sence_login/pages/error.php" name="UrlError">';
         $text .=    '<input type="hidden" value="'.$runalumno.'" name="RunAlumno">';
-        $text .=    '<input type="hidden" value="16" name="IdSesionAlumno"><br>';
+        $text .=    '<input type="hidden" value="'.$idsesionalumno.'" name="IdSesionAlumno"><br>';
         $text .=    '<br><input type="submit" value="Iniciar" disabled="disabled" id="submit-button">';
         $text .='</form>';
         $text .='<script>';
@@ -100,10 +101,10 @@ class block_if_sence_login extends block_base {
             $text .=                '<input type=\"hidden\" value=\"'.$course->codsence.'\" name=\"CodSence\">';
             $text .=                '<input type=\"hidden\" value=\"'.$data_course['codcurso'].'\" name=\"CodigoCurso\">';
             $text .=                '<input type=\"hidden\" value=\"'.$data_course['lineacap'].'\" name=\"LineaCapacitacion\">';
-            $text .=                '<input type=\"hidden\" value=\""+prot+"//"+host+"/moodle/course/view.php?id='.$course->id.'\" name=\"UrlRetoma\">';
-            $text .=                '<input type=\"hidden\" value=\""+prot+"//"+host+"/moodle/blocks/if_sence_login/error/error.php\" name=\"UrlError\">';
+            $text .=                '<input type=\"hidden\" value=\""+prot+"//"+host+"/moodle/blocks/if_sence_login/pages/exito.php\" name=\"UrlRetoma\">';
+            $text .=                '<input type=\"hidden\" value=\""+prot+"//"+host+"/moodle/blocks/if_sence_login/pages/error.php\" name=\"UrlError\">';
             $text .=                '<input type=\"hidden\" value=\"'.$runalumno.'\" name=\"RunAlumno\">';
-            $text .=                '<input type=\"hidden\" value=\"16\" name=\"IdSesionAlumno\">';
+            $text .=                '<input type=\"hidden\" value=\"'.$idsesionalumno.'\" name=\"IdSesionAlumno\">';
             $text .=                '<input type=\"submit\" value=\"Iniciar curso a través de SENCE\">';
             $text .=            '</form>';
             $text .=        '");';
