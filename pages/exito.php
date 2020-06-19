@@ -12,15 +12,15 @@ $dbp = $CFG->prefix; #prefijo de la base de datos
 
 $CodSence =          $_POST['CodSence'];
 $CodigoCurso =       $_POST['CodigoCurso'];
-$idSesionAlumno =    $_POST['idSesionAlumno'];
-$idSesionSence =     $_POST['idSesionSence'];
+$IdSesionAlumno =    $_POST['IdSesionAlumno'];
+$IdSesionSence =     $_POST['IdSesionSence'];
 $RunAlumno =         $_POST['RunAlumno'];
 $FechaHora =         $_POST['FechaHora'];
 $ZonaHoraria =       $_POST['ZonaHoraria'];
 $LineaCapacitacion = $_POST['LineaCapacitacion'];
 
 #Revisar si el idSesionAlumno que llego es el mismo que fue enviado
-if (strval(sesskey()) == strval($idSesionAlumno)){
+if (strval(sesskey()) == strval($IdSesionAlumno)){
   #Obtener categoria de los campos SENCE
   $catId = $DB->get_record_sql("SELECT id FROM ".$dbp."customfield_category WHERE name = 'SENCE'")->id;
   #Obtener ids de los campos SENCE
