@@ -28,32 +28,34 @@ require_once(dirname(__FILE__).'/../../../config.php');
 
 function get_courses_sence_list(){
     global $DB;
-    $query = "select c.id,c.fullname, cfd.value as 'codsence' from mdl_course c,mdl_customfield_data cfd,"
-            . "mdl_customfield_field cff where cff.shortname=? and cff.id = cfd.fieldid "
+    $dbp = "mdl_"; #$CFG->prefix; #arreglo pendiente
+    $query = "select c.id,c.fullname, cfd.value as 'codsence' from ".$dbp."course c,".$dbp."customfield_data cfd, "
+            . $dbp ."customfield_field cff where cff.shortname=? and cff.id = cfd.fieldid "
             . "and cfd.instanceid = c.id and cfd.value<>''";
     $result = $DB->get_recordset_sql($query, ['codsence']);
     return $result;
 }
 function get_data_course_by_courseid($id){
     global $DB;
+    $dbp = "mdl_";#$CFG->prefix; #arreglo pendiente
     $result = [];
-    $query1 = "select cfd.value as 'lineacap' from mdl_course c,mdl_customfield_data cfd,"
-            . "mdl_customfield_field cff where cff.shortname=? and cff.id = cfd.fieldid "
+    $query1 = "select cfd.value as 'lineacap' from ".$dbp."course c,".$dbp."customfield_data cfd, "
+            .$dbp. "customfield_field cff where cff.shortname=? and cff.id = cfd.fieldid "
             . "and cfd.instanceid = c.id and cfd.value<>'' and cfd.instanceid = ?";
     $result1 = $DB->get_recordset_sql($query1, ['lineacap',$id]);
     //var_dump($result1);
     foreach($result1 as $lc){
         $result['lineacap'] = $lc->lineacap;
     }
-    $query2 = "select cfd.value as 'codcurso' from mdl_course c,mdl_customfield_data cfd,"
-            . "mdl_customfield_field cff where cff.shortname=? and cff.id = cfd.fieldid "
+    $query2 = "select cfd.value as 'codcurso' from ".$dbp."course c,".$dbp."customfield_data cfd, "
+            . $dbp."customfield_field cff where cff.shortname=? and cff.id = cfd.fieldid "
             . "and cfd.instanceid = c.id and cfd.value<>'' and cfd.instanceid = ?";
     $result2 = $DB->get_recordset_sql($query2, ['codcurso',$id]);
     foreach($result2 as $lc2){
         $result['codcurso'] = $lc2->codcurso;
     }
-    $query3 = "select cfd.value as 'successurl' from mdl_course c,mdl_customfield_data cfd,"
-            . "mdl_customfield_field cff where cff.shortname=? and cff.id = cfd.fieldid "
+    $query3 = "select cfd.value as 'successurl' from ".$dbp."course c,".$dbp."customfield_data cfd,"
+            . $dbp."customfield_field cff where cff.shortname=? and cff.id = cfd.fieldid "
             . "and cfd.instanceid = c.id and cfd.value<>'' and cfd.instanceid = ?";
     $result3 = $DB->get_recordset_sql($query3, ['successurl',$id]);
     foreach($result3 as $lc2){
