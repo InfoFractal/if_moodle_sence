@@ -39,13 +39,13 @@ Esta extensión requiere de Moodle 3.8 o superior para funcionar y permisos de a
 * **[Descarga](https://github.com/InfoFractal/if_moodle_sence/archive/master.zip)** la última versión de este plugin en formato zip.
 
 * **En Moodle como Admin** ve a: `/ Área personal/ Administración del sitio / Cursos / Campos personalizados del curso / Add new category/`
-	* Agrega la categoría sence y agrega como campos de texto corto o short text los siguientes campos: 
+	* Agrega la categoría SENCE *con Mayúsculas* y agrega como campos de texto corto o short text los siguientes campos: 
 		* Código curso sence [codsence], 
 		* Código curso [codcurso],
 		* Linea de capacitación [lineacap]
 	* Es importante que el nombre corto, entre paréntesis [] sea el mismo aquí indicado. Debería quedar de la siguiente forma:
 
-	[![Moodle-course-fields.png](https://i.postimg.cc/J75FZSS4/Moodle-course-fields.png)](https://postimg.cc/Z00jhsT1) 
+	[![moodle4.png](https://i.postimg.cc/4dGy3t12/moodle4.png)](https://postimg.cc/JyTM6svj) 
 
 * **En Moodle como Admin** ve a: `/ Área personal / Administración del sitio / Usuarios / Cuentas/ Campos de perfil del usuario/`
 	* Agrega un nuevo campo del tipo entrada de texto con el nombre corto runalumno: 
