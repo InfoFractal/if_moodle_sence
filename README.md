@@ -31,7 +31,7 @@
 
 
 ## Acerca de esta extensión
-Esta extensión o plugin fue desarrollada por InfoFractal para los organismos técnicos de capacitacion *(OTEC)* de Chile, que a partir de agosto 2020 necesitan que sus usuarios realicen una autentificación externa en la página del Servicio Nacional de Capacitación y Empleo *(Sence)*.
+Esta extensión o plugin fue desarrollada por InfoFractal para los organismos técnicos de capacitacion **(OTEC)** de Chile, que a partir de agosto 2020 necesitan que sus usuarios realicen una autentificación externa en la página del Servicio Nacional de Capacitación y Empleo **(Sence)**.
 La extensión esta diseñado para forzar el login del estudiante o capacitado al iniciar un curso sence en la plataforma Moodle.
 
 ## Instalación
@@ -39,11 +39,11 @@ Esta extensión requiere de Moodle 3.8 o superior para funcionar y permisos de a
 * **[Descarga](https://github.com/InfoFractal/if_moodle_sence/archive/master.zip)** la última versión de este plugin en formato zip.
 
 * **En Moodle como Admin** ve a: `/ Área personal/ Administración del sitio / Cursos / Campos personalizados del curso / Add new category/`
-	* Agrega la categoría SENCE *con Mayúsculas* y agrega como campos de texto corto o short text los siguientes campos: 
+	* Agrega la categoría SENCE *con Mayúsculas* y agrega como campos de texto corto o Short text los siguientes campos: 
 		* Código curso sence [codsence], 
 		* Código curso [codcurso],
 		* Linea de capacitación [lineacap]
-	* Es importante que el nombre corto, entre paréntesis [] sea el mismo aquí indicado. Debería quedar de la siguiente forma:
+	* Es importante que el nombre corto, entre paréntesis '[ ]' sea el mismo aquí indicado. Debería quedar de la siguiente forma:
 
 	[![moodle4.png](https://i.postimg.cc/4dGy3t12/moodle4.png)](https://postimg.cc/JyTM6svj) 
 
@@ -76,7 +76,8 @@ Esta extensión requiere de Moodle 3.8 o superior para funcionar y permisos de a
 * **En Moodle con permisos para crear curso** ve a: `/ Área personal / Administración del sitio / Cursos / Administrar cursos y categorías/ Agrega otro curso /`
 	* Crea tu curso y abajo agrega los campos correspondientes a la categoria sence: 
 		* codsence, codcurso, lineacap 
-	* Deberías terminar con esto:
+	* puedes usar estos códigos en el area test [![moodle5.png](https://i.postimg.cc/rmnp9pWq/moodle5.png)](https://postimg.cc/FdSmrND6)
+	* Si todo salio bien, deberías ver los cursos sence con un boton de login nuevo:
 	[![cursos.png](https://i.postimg.cc/NjHKLhjp/cursos.png)](https://postimg.cc/LJm90bf1)
 
 * **En Moodle con permisos para agreagr usuarios(estudiantes o capacitados)** ve a: `/ Área personal / Administración del sitio / Usuarios / Cuentas /  Agregar un usuario /`
