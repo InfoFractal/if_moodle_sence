@@ -68,7 +68,7 @@ class block_if_sence_login extends block_base {
         $courses_sence_2 = get_courses_sence_list();
         $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http")."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $new_link = str_replace("?redirect=0", "",$actual_link);
-        echo "<script>console.log('$new_link');</script>";
+        //echo "<script>console.log('$new_link');</script>";
         $text  = '<h5>Selecciona el curso que deseas</h5>';
         $text .= '<form action="https://sistemas.sence.cl/rcetest/Registro/IniciarSesion" method="post" id="form-sence">';
         $text .=    '<select id="course-selector">';
