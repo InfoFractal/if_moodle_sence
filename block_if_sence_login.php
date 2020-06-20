@@ -59,7 +59,6 @@ class block_if_sence_login extends block_base {
         global $USER;
         //$DB->set_debug(true);
         $runalumno = $USER->profile['runalumno'];
-        $username = $USER->username;
         
         $runotec = get_config('block_if_sence_login','runotec');
         $tokenotec = get_config('block_if_sence_login','tokenotec');
@@ -68,6 +67,8 @@ class block_if_sence_login extends block_base {
         $courses_sence = get_courses_sence_list();
         $courses_sence_2 = get_courses_sence_list();
         $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http")."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $new_link = str_replace("?redirect=0", "",$actual_link);
+        echo "<script>console.log('$new_link');</script>";
         $text  = '<h5>Selecciona el curso que deseas</h5>';
         $text .= '<form action="https://sistemas.sence.cl/rcetest/Registro/IniciarSesion" method="post" id="form-sence">';
         $text .=    '<select id="course-selector">';
@@ -81,8 +82,8 @@ class block_if_sence_login extends block_base {
         $text .=    '<input type="hidden" value="" name="CodSence" id="cod-sence">';
         $text .=    '<input type="hidden" value="" name="CodigoCurso" id="cod-curso">';
         $text .=    '<input type="hidden" value="" name="LineaCapacitacion" id="linea-cap">';
-        $text .=    '<input type="hidden" value="'.$actual_link.'/moodle/blocks/if_sence_login/pages/exito.php" name="UrlRetoma">';
-        $text .=    '<input type="hidden" value="'.$actual_link.'/moodle/blocks/if_sence_login/pages/error.php" name="UrlError">';
+        $text .=    '<input type="hidden" value="'.$new_link.'blocks/if_sence_login/pages/exito.php" name="UrlRetoma">';
+        $text .=    '<input type="hidden" value="'.$new_link.'blocks/if_sence_login/pages/error.php" name="UrlError">';
         $text .=    '<input type="hidden" value="'.$runalumno.'" name="RunAlumno">';
         $text .=    '<input type="hidden" value="'.$idsesionalumno.'" name="IdSesionAlumno"><br>';
         $text .=    '<br><input type="submit" value="Iniciar" disabled="disabled" id="submit-button">';
