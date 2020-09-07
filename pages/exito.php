@@ -1,8 +1,7 @@
 <?php
 
-
-require_once(__DIR__ . '../../../../config.php');
-require_once(__DIR__ . '../models/session_store_helpers.php');
+require_once(__DIR__ . '/../../../config.php');
+require_once(__DIR__ . '/../model/session_store_helpers.php');
 
 require_login();
 $PAGE->set_context(get_system_context());
@@ -38,7 +37,7 @@ if (strval(sesskey()) == strval($IdSesionAlumno)){
   #Genera url de redireccion
   if (count($courseIds) == 1){ #un curso por codigo sence
       #curso es valido, agregando datos de sesion a la db 
-      sence_write_sesion($RunAlumno,$IdSesionAlumno,$IdSesionSence,$CodSence,$FechaHora);
+      sence_write_session($RunAlumno,$IdSesionAlumno,$IdSesionSence,$CodSence,$FechaHora);
       $idcurso = array_values($courseIds)[0]->instanceid;
       $url = $CFG->wwwroot."/course/view.php?id=".$idcurso;
       $text .= "<script>";

@@ -26,15 +26,16 @@
  */
 require_once(dirname(__FILE__).'/../../../config.php');
 require_login();
-global $DB;
 
 
 function sence_get_session_info($runalumno,$codsence){
+  global $DB;
   $sesionsence = $DB->get_record('block_if_sence_login',['runalumno' => $runalumno, 'codsence' => $codsence]);
   return $sesionsence;
 }
 
 function sence_write_session($runalumno,$idsesionalumno,$idsesionsence,$codsence,$fechahora){
+  global $DB;
   $sesionsence = sence_get_session_info($runalumno,$codsence);
   if($sesionsence){
     $sesionsence->idsesionalumno = $idsesionalumno;
@@ -46,7 +47,7 @@ function sence_write_session($runalumno,$idsesionalumno,$idsesionsence,$codsence
     $nsesionsence->runalumno = $runalumno;
     $nsesionsence->idsesionalumno = $idsesionalumno;
     $nsesionsence->idsesionsence = $idsesionsence;
-    $nsesionsence->codigocurso = $codsence;
+    $nsesionsence->codsence = $codsence;
     $nsesionsence->fechahora = $fechahora;
     $DB->insert_record('block_if_sence_login',$nsesionsence);
   }
