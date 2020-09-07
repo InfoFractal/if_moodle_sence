@@ -1,6 +1,8 @@
 <?php
 
+
 require_once(__DIR__ . '../../../../config.php');
+require_once(__DIR__ . '../models/session_store_helpers.php');
 
 require_login();
 $PAGE->set_context(get_system_context());
@@ -8,7 +10,6 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title("Login SENCE exitoso");
 $PAGE->set_heading("Pronto seras redireccionado");
 $PAGE->set_url($CFG->wwwroot.'/blocks/if_sence_login/pages/exito.php');
-$dbp = $CFG->prefix; #prefijo de la base de datos
 
 $CodSence =          $_POST['CodSence'];
 $CodigoCurso =       $_POST['CodigoCurso'];
@@ -22,20 +23,22 @@ $LineaCapacitacion = $_POST['LineaCapacitacion'];
 #Revisar si el idSesionAlumno que llego es el mismo que fue enviado
 if (strval(sesskey()) == strval($IdSesionAlumno)){
   #Obtener categoria de los campos SENCE
-  $catId = $DB->get_record_sql("SELECT id FROM ".$dbp."customfield_category WHERE name = 'SENCE'")->id;
+  $catId = $DB->get_record_sql("SELECT id FROM {customfield_category} WHERE name = 'SENCE'")->id;
   #Obtener ids de los campos SENCE
-  $fieldIds = $DB->get_records_sql("SELECT id,shortname FROM ".$dbp."customfield_field WHERE categoryid = ".$catId);
+  $fieldIds = $DB->get_records_sql("SELECT id,shortname FROM {customfield_field} WHERE categoryid = ".$catId);
   $customFields = array();
   foreach ($fieldIds as $v){
       $customFields[$v->shortname] = $v->id; 
   }
   
   #Obtener ids de los cursos que tienen el mismo CodigoCurso entregado por el POST
-  $query = "SELECT instanceid,charvalue FROM ".$dbp."customfield_data WHERE fieldid = '".$customFields["codcurso"]."' AND charvalue = '".$CodigoCurso."'";
+  $query = "SELECT instanceid,charvalue FROM {customfield_data} WHERE fieldid = '".$customFields["codcurso"]."' AND charvalue = '".$CodigoCurso."'";
   $courseIds = $DB->get_records_sql($query);
   $text = '';
   #Genera url de redireccion
   if (count($courseIds) == 1){ #un curso por codigo sence
+      #curso es valido, agregando datos de sesion a la db 
+      sence_write_sesion($RunAlumno,$IdSesionAlumno,$IdSesionSence,$CodSence,$FechaHora);
       $idcurso = array_values($courseIds)[0]->instanceid;
       $url = $CFG->wwwroot."/course/view.php?id=".$idcurso;
       $text .= "<script>";
