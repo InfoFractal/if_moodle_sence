@@ -34,13 +34,14 @@ function sence_get_session_info($runalumno,$codsence){
   return $sesionsence;
 }
 
-function sence_write_session($runalumno,$idsesionalumno,$idsesionsence,$codsence,$fechahora){
+function sence_write_session($runalumno,$idsesionalumno,$idsesionsence,$codsence,$fechahora,$zonahoraria){
   global $DB;
   $sesionsence = sence_get_session_info($runalumno,$codsence);
   if($sesionsence){
     $sesionsence->idsesionalumno = $idsesionalumno;
     $sesionsence->idsesionsence = $idsesionsence;
     $sesionsence->fechahora = $fechahora;
+    $sesionsence->zonahoraria = $zonahoraria;
     $DB->update_record('block_if_sence_login',$sesionsence);
   }else{
     $nsesionsence = new stdClass();
@@ -49,6 +50,7 @@ function sence_write_session($runalumno,$idsesionalumno,$idsesionsence,$codsence
     $nsesionsence->idsesionsence = $idsesionsence;
     $nsesionsence->codsence = $codsence;
     $nsesionsence->fechahora = $fechahora;
+    $nsesionsence->zonahoraria = $zonahoraria;
     $DB->insert_record('block_if_sence_login',$nsesionsence);
   }
 }

@@ -37,7 +37,7 @@ if (strval(sesskey()) == strval($IdSesionAlumno)){
   #Genera url de redireccion
   if (count($courseIds) == 1){ #un curso por codigo sence
       #curso es valido, agregando datos de sesion a la db 
-      sence_write_session($RunAlumno,$IdSesionAlumno,$IdSesionSence,$CodSence,$FechaHora);
+      sence_write_session($RunAlumno,$IdSesionAlumno,$IdSesionSence,$CodSence,$FechaHora,$ZonaHoraria);
       $idcurso = array_values($courseIds)[0]->instanceid;
       $url = $CFG->wwwroot."/course/view.php?id=".$idcurso;
       $text .= "<script>";
