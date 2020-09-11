@@ -9,11 +9,16 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title("Login SENCE exitoso");
 $PAGE->set_heading("Pronto seras redireccionado");
 $PAGE->set_url($CFG->wwwroot.'/blocks/if_sence_login/pages/exito.php');
+$isLogoutURL = false;
+if (strpos($_SERVER['HTTP_REFERER'], "Logout") !== false){
+    $isLogoutURL = true;
+}
+
 
 $CodSence =          $_POST['CodSence'];
 $CodigoCurso =       $_POST['CodigoCurso'];
 $IdSesionAlumno =    $_POST['IdSesionAlumno'];
-$IdSesionSence =     $_POST['IdSesionSence'];
+
 $RunAlumno =         $_POST['RunAlumno'];
 $FechaHora =         $_POST['FechaHora'];
 $ZonaHoraria =       $_POST['ZonaHoraria'];
@@ -35,8 +40,20 @@ if (strval(sesskey()) == strval($IdSesionAlumno)){
   $courseIds = $DB->get_records_sql($query);
   $text = '';
   #Genera url de redireccion
-  if (count($courseIds) == 1){ #un curso por codigo sence
+  if($isLogoutURL == true){
       #curso es valido, agregando datos de sesion a la db 
+      sence_invalidate_session($RunAlumno,$CodSence);
+      $idcurso = array_values($courseIds)[0]->instanceid;
+      $url = $CFG->wwwroot."/?redirect=0".$idcurso;
+      $text .= "<script>";
+      $text .= "  setTimeout(function(){";
+      $text .= "  window.location.href = '".$url."'";
+      $text .= "  },5000);";
+      $text .= "</script>";
+      $text .= "<p> La sesión ha sido cerrada. Seras redireccionado despues de 5 segundos.<p>";
+  }else if (count($courseIds) == 1 && $isLogoutURL == false){ #un curso por codigo sence
+      #curso es valido, agregando datos de sesion a la db 
+      $IdSesionSence =     $_POST['IdSesionSence'];
       sence_write_session($RunAlumno,$IdSesionAlumno,$IdSesionSence,$CodSence,$FechaHora,$ZonaHoraria);
       $idcurso = array_values($courseIds)[0]->instanceid;
       $url = $CFG->wwwroot."/course/view.php?id=".$idcurso;
@@ -46,13 +63,14 @@ if (strval(sesskey()) == strval($IdSesionAlumno)){
       $text .= "  },5000);";
       $text .= "</script>";
       $text .= "<p> Seras redireccionado despues de 5 segundos.<p>";
-  }
+  } 
   else if(count($courseIds) > 1){ #mas de un curso con los mismos codigos
     
   }
   else { #curso no encontrado
     
   }
+
   echo $OUTPUT->header();
   echo $text;
   echo $OUTPUT->footer();

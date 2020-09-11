@@ -27,6 +27,7 @@
 
 require_once(dirname(__FILE__).'/../../config.php');
 require_once(dirname(__FILE__).'/model/courses_sence_list.php');
+require_once(dirname(__FILE__).'/model/session_store_helpers.php');
 defined('MOODLE_INTERNAL')||die();
 class block_if_sence_login extends block_base {
     
@@ -59,18 +60,17 @@ class block_if_sence_login extends block_base {
         global $USER;
         //$DB->set_debug(true);
         $runalumno = $USER->profile['runalumno'];
+        $userid = $USER->id;
         
         $runotec = get_config('block_if_sence_login','runotec');
         $tokenotec = get_config('block_if_sence_login','tokenotec');
         $idsesionalumno = sesskey();
-        
         $courses_sence = get_courses_sence_list();
         $courses_sence_2 = get_courses_sence_list();
         $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http")."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $new_link = str_replace("?redirect=0", "",$actual_link);
-        //echo "<script>console.log('$new_link');</script>";
         $text  = '<h5>Selecciona el curso que deseas</h5>';
-        $text .= '<form action="https://sistemas.sence.cl/rcetest/Registro/IniciarSesion" method="post" id="form-sence">';
+        $text .= '<form method="post" id="form-sence">';
         $text .=    '<select id="course-selector">';
         $text .=    '<option value="-1">Seleccione...</option>';
         foreach ($courses_sence as $course){
@@ -96,7 +96,13 @@ class block_if_sence_login extends block_base {
             $data_course = get_data_course_by_courseid($course->id);
             $text .=        '$("[data-courseid='.$course->id.'] a").removeAttr("href");';
             $text .=        '$("[data-courseid='.$course->id.'] .content").html("';
-            $text .=            '<form action=\"https://sistemas.sence.cl/rcetest/Registro/IniciarSesion\" method=\"post\">';
+            //echo sence_validate_session($runalumno,$course->codsence)."\n";
+            if(sence_validate_session($runalumno,$course->codsence)){
+                $text .=        '<form action=\""+prot+"//"+host+"/moodle/course/view.php?id='.$course->id.'\" method=\"post\">';
+            }else{
+                $text .=        '<form action=\"https://sistemas.sence.cl/rcetest/Registro/IniciarSesion\" method=\"post\">';
+            }
+            
             $text .=                '<input type=\"hidden\" value=\"'.$runotec.'\" name=\"RutOtec\">';
             $text .=                '<input type=\"hidden\" value=\"'.$tokenotec.'\" name=\"Token\">';
             $text .=                '<input type=\"hidden\" value=\"'.$course->codsence.'\" name=\"CodSence\">';
@@ -106,7 +112,12 @@ class block_if_sence_login extends block_base {
             $text .=                '<input type=\"hidden\" value=\""+prot+"//"+host+"/moodle/blocks/if_sence_login/pages/error.php\" name=\"UrlError\">';
             $text .=                '<input type=\"hidden\" value=\"'.$runalumno.'\" name=\"RunAlumno\">';
             $text .=                '<input type=\"hidden\" value=\"'.$idsesionalumno.'\" name=\"IdSesionAlumno\">';
-            $text .=                '<input type=\"submit\" value=\"Iniciar curso a través de SENCE\">';
+            if(sence_validate_session($runalumno,$course->codsence)){
+                $text .=                '<input type=\"submit\" value=\"Seguir con el curso\">';
+            }else{
+                $text .=                '<input type=\"submit\" value=\"Iniciar curso a través de SENCE\">';
+            }
+            
             $text .=            '</form>';
             $text .=        '");';
             
@@ -118,7 +129,7 @@ class block_if_sence_login extends block_base {
         $text .=            '$.ajax({';
         $text .=                'url: "/moodle/blocks/if_sence_login/model/sence_data_filter.php",';
         $text .=                'type: "POST",';
-        $text .=                'data: {id:id}';
+        $text .=                'data: {id:id,runalumno:"'.$runalumno.'"}';
         $text .=            '}).done(function(js) {';
         $text .=                'eval(js);';
         $text .=                '$("#submit-button").attr("disabled", false);';
@@ -128,6 +139,26 @@ class block_if_sence_login extends block_base {
         $text .=        '}';
         $text .='   });';
         $text .='</script>';
+        $text .= '<hr>';
+        $courses_user = get_courses_data_from_alumnoid($userid);
+        $text  .= '<h5>Sesiones iniciadas</h5>';
+        $count = 1;
+        foreach($courses_user as $c_u){
+            $text  .= '<form name="course_list_form_'.$count.'" action="https://sistemas.sence.cl/rcetest/Registro/CerrarSesion" method="post">';
+            $text .=    '<p>'.$c_u->nombrecurso.'  <input type="submit" value="Cerrar"/></p>';
+            $text .=    '<input type="hidden" value="'.$runotec.'" name="RutOtec">';
+            $text .=    '<input type="hidden" value="'.$tokenotec.'" name="Token">';
+            $text .=    '<input type="hidden" value="'.$c_u->codsence.'" name="CodSence">';
+            $text .=    '<input type="hidden" value="'.$c_u->codcurso.'" name="CodigoCurso">';
+            $text .=    '<input type="hidden" value="'.$c_u->lineacap.'" name="LineaCapacitacion">';
+            $text .=    '<input type="hidden" value="'.$new_link.'blocks/if_sence_login/pages/exito.php" name="UrlRetoma">';
+            $text .=    '<input type="hidden" value="'.$new_link.'blocks/if_sence_login/pages/error.php" name="UrlError">';
+            $text .=    '<input type="hidden" value="'.$runalumno.'" name="RunAlumno">';
+            $text .=    '<input type="hidden" value="'.$idsesionalumno.'" name="IdSesionAlumno">';
+            $text .=    '<input type="hidden" value="'.$c_u->idsesionsence.'" name="IdSesionSence"><br>';
+            $text .= '</form>';
+            $count++;
+        } 
         return $text;
     }
     

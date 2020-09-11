@@ -56,25 +56,30 @@ function sence_write_session($runalumno,$idsesionalumno,$idsesionsence,$codsence
 }
 
 function sence_invalidate_session($runalumno,$codsence){
-  sence_write_session_info($runalumno,'','',$codsence,'');
+  sence_write_session($runalumno,'','',$codsence,'','');
 }
 
 function sence_validate_session($runalumno,$codsence){
   #esta funcion revisa si el ultimo login en sence es aún válido. por el momento los logins expiran despues de 6 horas
   #o si el usuario hizo logout de moodle.
   $sesionsence = sence_get_session_info($runalumno,$codsence);
+  
   if($sesionsence){
     if($sesionsence->idsesionsence !== ''){
       $sesionmdl = strval(sesskey());
       if($sesionmdl == strval($sesionsence->idsesionalumno)){
-        $now = date("yy-m-d h:m:s");
-        $horalogin = date(strtotime($sesionsence->fechahora),strtotime("+6 hours"));
-        if($horalogin > $now){
-          return True;
+        $tz = 'America/Santiago';
+        $timestamp = time();
+        $dt = new DateTime("now", new DateTimeZone($tz)); 
+        $dt->setTimestamp($timestamp); 
+        $now = $dt->format('yy-m-d H:i:s');
+        $expiresessiontime = date('yy-m-d H:i:s',strtotime($sesionsence->fechahora)+21600);
+        if($expiresessiontime > $now){
+          return true;
         }
       }
     }
   }
-  return False;
+  return false;
 }
 

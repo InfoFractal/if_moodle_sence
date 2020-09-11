@@ -25,6 +25,23 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(dirname(__FILE__).'/../../../config.php');
+function get_courses_data_from_alumnoid($id){
+    global $DB;
+    $data_array = [];
+    $query = "select u.username,u.id as 'userid',c.id as 'courseid',c.fullname, cfd.value as 'codsence',bifl.runalumno,bifl.idsesionsence from {course} c,{customfield_data} cfd, {customfield_field} cff,{user} u,{enrol} e,{user_enrolments} ue,{block_if_sence_login} bifl where cff.shortname=? and cff.id = cfd.fieldid and cfd.instanceid = c.id and cfd.value<>'' and e.courseid = c.id and e.id = ue.enrolid and ue.userid = u.id and u.id = ? and bifl.codsence = cfd.value and bifl.idsesionalumno <>''";
+    $result = $DB->get_recordset_sql($query, ['codsence',$id]); 
+    foreach($result as $r){
+        $data = new stdClass();
+        $data_ = get_data_course_by_courseid($r->courseid);
+        $data->nombrecurso = $r->fullname;
+        $data->codsence = $r->codsence;
+        $data->idsesionsence = $r->idsesionsence;
+        $data->lineacap = $data_['lineacap'];
+        $data->codcurso = $data_['codcurso'];
+        array_push($data_array,$data);
+    }
+    return $data_array;
+}
 
 function get_courses_sence_list(){
     global $DB;
