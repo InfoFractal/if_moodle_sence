@@ -25,9 +25,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(dirname(__FILE__).'/../../../config.php');
+require_once(__DIR__ . '/../model/session_store_helpers.php');
 global $DB;
 
 $courseid = $_POST['id'];
+$runalumno = $_POST['runalumno'];
 
 //Obtenemos id del campo personalizado 'CodSence'
 $codsenceid = $DB->get_record('customfield_field', ['shortname' => 'codsence'],'id');
@@ -36,9 +38,9 @@ $codsence = $DB->get_record('customfield_data',
         ['fieldid' => $codsenceid->id,'instanceid' => intval($courseid)],
         'value');
 
-//Obtenemos id del campo personalizado 'LineaCapacitación'
+//Obtenemos id del campo personalizado 'LineaCapacitaci贸n'
 $lineacapid = $DB->get_record('customfield_field', ['shortname' => 'lineacap'],'id');
-//Obtenemos el valor del LineaCapacitación
+//Obtenemos el valor del LineaCapacitaci贸n
 $lineacap = $DB->get_record('customfield_data', 
         ['fieldid' => $lineacapid->id,'instanceid' => intval($courseid)],
         'value');
@@ -55,3 +57,8 @@ $codcurso = $DB->get_record('customfield_data',
 echo '$("#cod-sence").val("'.$codsence->value.'");';
 echo '$("#linea-cap").val("'.$lineacap->value.'");';
 echo '$("#cod-curso").val("'.$codcurso->value.'");';
+if(sence_validate_session($runalumno,$codsence->value)){
+    echo '$("#form-sence").attr("action","'.$CFG->wwwroot.'/course/view.php?id='.$courseid.'");';
+}else{
+    echo '$("#form-sence").attr("action","https://sistemas.sence.cl/rcetest/Registro/IniciarSesion");';
+}
