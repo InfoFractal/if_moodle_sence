@@ -60,5 +60,5 @@ echo '$("#cod-curso").val("'.$codcurso->value.'");';
 if(sence_validate_session($runalumno,$codsence->value)){
     echo '$("#form-sence").attr("action","'.$CFG->wwwroot.'/course/view.php?id='.$courseid.'");';
 }else{
-    echo '$("#form-sence").attr("action","https://sistemas.sence.cl/rcetest/Registro/IniciarSesion");';
+    echo '$("#form-sence").attr("action","https://sistemas.sence.cl/rce/Registro/IniciarSesion");';
 }

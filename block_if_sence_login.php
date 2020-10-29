@@ -117,7 +117,7 @@ class block_if_sence_login extends block_base {
                 $text .=        '<form action=\""+prot+"//"+host+"/enlinea/course/view.php?id='.$course->id.'\" method=\"post\">';
                 $text .=                '<input type=\"submit\" value=\"Seguir con el curso\">';
             }else{
-                $text .=        '<form action=\"https://sistemas.sence.cl/rcetest/Registro/IniciarSesion\" method=\"post\">';
+                $text .=        '<form action=\"https://sistemas.sence.cl/rce/Registro/IniciarSesion\" method=\"post\">';
                 $text .=                '<input type=\"hidden\" value=\"'.$runotec.'\" name=\"RutOtec\">';
                 $text .=                '<input type=\"hidden\" value=\"'.$tokenotec.'\" name=\"Token\">';
                 $text .=                '<input type=\"hidden\" value=\"'.$course->codsence.'\" name=\"CodSence\">';
@@ -156,7 +156,7 @@ class block_if_sence_login extends block_base {
         $text  .= '<h5>Sesiones iniciadas</h5>';
         $count = 1;
         foreach($courses_user as $c_u){
-            $text  .= '<form name="course_list_form_'.$count.'" action="https://sistemas.sence.cl/rcetest/Registro/CerrarSesion" method="post">';
+            $text  .= '<form name="course_list_form_'.$count.'" action="https://sistemas.sence.cl/rce/Registro/CerrarSesion" method="post">';
             $text .=    '<p>'.$c_u->nombrecurso.'  <input type="submit" value="Cerrar"/></p>';
             $text .=    '<input type="hidden" value="'.$runotec.'" name="RutOtec">';
             $text .=    '<input type="hidden" value="'.$tokenotec.'" name="Token">';
