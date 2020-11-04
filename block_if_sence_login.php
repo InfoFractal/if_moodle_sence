@@ -110,9 +110,8 @@ class block_if_sence_login extends block_base {
             $text .=    'var host = document.location.hostname;';
         foreach ($courses_sence_2 as $course){
             $data_course = get_data_course_by_courseid($course->id);
-            $text .=        '$("[data-courseid='.$course->id.'] a").removeAttr("href");';
-            $text .=        '$("[data-courseid='.$course->id.'] .content").html("';
-            //echo sence_validate_session($runalumno,$course->codsence)."\n";
+            $text .=        '$("a[href*=\'/course/view.php?id='.$course->id.'\']:contains(\''.$course->fullname.'\')").remove(".if_block_sence_'.$course->id.'");';
+            $text .=        '$("a[href*=\'/course/view.php?id='.$course->id.'\']:contains(\''.$course->fullname.'\')").append("<div style=\'margin-top:10px;font-size:12px;\' class=\'if_block_sence_'.$course->id.'\'>';
             if(sence_validate_session($runalumno,$course->codsence)){
                 $text .=        '<form action=\""+prot+"//"+host+"/enlinea/course/view.php?id='.$course->id.'\" method=\"post\">';
                 $text .=                '<input type=\"submit\" value=\"Seguir con el curso\">';
@@ -127,12 +126,10 @@ class block_if_sence_login extends block_base {
                 $text .=                '<input type=\"hidden\" value=\""+prot+"//"+host+"/enlinea/blocks/if_sence_login/pages/error.php\" name=\"UrlError\">';
                 $text .=                '<input type=\"hidden\" value=\"'.$runalumno.'\" name=\"RunAlumno\">';
                 $text .=                '<input type=\"hidden\" value=\"'.$idsesionalumno.'\" name=\"IdSesionAlumno\">';
-                $text .=                '<input type=\"submit\" value=\"Iniciar curso a trav茅s de SENCE\">';
+                $text .=                '<input type=\"submit\" value=\"Iniciar con SENCE\">';
             }
-            
-            $text .=            '</form>';
             $text .=        '");';
-            
+            $text .=        '$("a[href*=\'/course/view.php?id='.$course->id.'\']").removeAttr("href");';            
         }
             $text .=    '});';
         $text .=    '$("#course-selector").change(function(){';
