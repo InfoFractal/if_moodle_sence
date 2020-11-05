@@ -25,6 +25,15 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(dirname(__FILE__).'/../../../config.php');
+function is_registered_in_course($uid,$cid){
+    global $DB;
+    $query = "select c.fullname from {course} c,{user} u,{enrol} e,{user_enrolments} ue where e.courseid = c.id and e.id = ue.enrolid and ue.userid = u.id and u.id = ? and c.id = ?";
+    $result = $DB->get_recordset_sql($query, [$uid,$cid]); 
+    foreach($result as $r){
+        return true;
+    }
+    return false;
+}
 function get_courses_data_from_alumnoid($id){
     global $DB;
     $data_array = [];
@@ -70,4 +79,5 @@ function get_data_course_by_courseid($id){
     }
     return $result;
 }
+
 
