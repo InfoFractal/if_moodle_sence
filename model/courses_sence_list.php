@@ -34,6 +34,32 @@ function is_registered_in_course($uid,$cid){
     }
     return false;
 }
+function is_only_student_in_course($uid,$cid){
+    global $DB;
+    $query = "select c.fullname,r.shortname,u.firstname from {course} c, {user} u, {role} r, {role_assignments} ra where ra.roleid = r.id and ra.userid = u.id and u.id = ? and c.id = ?";
+    $result = $DB->get_recordset_sql($query, [$uid,$cid]); 
+    $roles_arr = [];
+    foreach($result as $r){
+        array_push($roles_arr,$r->shortname);
+    }
+    
+    if(count($roles_arr)>1){
+        echo "mas de uno\n";
+    }else if(count($roles_arr)==1){
+        echo "hay uno registro\n";
+        if($roles_arr[0]=="student"){
+            echo "hay uno registro y es estudiante\n";
+            return true;
+        }else{
+            echo "hay uno registro y no es estudiante\n";
+            return false;
+        }
+    }else{
+        echo "no hay registro\n";
+        return false;
+    }
+    return false;
+}
 function get_courses_data_from_alumnoid($id){
     global $DB;
     $data_array = [];
@@ -79,5 +105,4 @@ function get_data_course_by_courseid($id){
     }
     return $result;
 }
-
 

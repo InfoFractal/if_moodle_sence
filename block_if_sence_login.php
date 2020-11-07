@@ -96,51 +96,63 @@ class block_if_sence_login extends block_base {
         $text .=    '<input type="hidden" value="" name="CodSence" id="cod-sence">';
         $text .=    '<input type="hidden" value="" name="CodigoCurso" id="cod-curso">';
         $text .=    '<input type="hidden" value="" name="LineaCapacitacion" id="linea-cap">';
-        $text .=    '<input type="hidden" value="'.$new_link.'blocks/if_sence_login/pages/exito.php" name="UrlRetoma">';
+        $text .=    '<input type="hidden" value="'.$new_link.'blocks/if_sence_login/pages/exito.php?type=login" name="UrlRetoma">';
         $text .=    '<input type="hidden" value="'.$new_link.'blocks/if_sence_login/pages/error.php" name="UrlError">';
         $text .=    '<input type="hidden" value="'.$runalumno.'" name="RunAlumno">';
         $text .=    '<input type="hidden" value="'.$idsesionalumno.'" name="IdSesionAlumno"><br>';
         $text .=    '<br><input type="submit" value="Iniciar" disabled="disabled" id="submit-button">';
         $text .='</form>';
         $text .='<script>';
+            $text .=    'var firstFolder = window.location.pathname.split("/")[1];';
             $text .=    '$(document).ready(function(){';
             $text .=    'var prot = document.location.protocol;';
             $text .=    'var host = document.location.hostname;';
-            $text .=    'var firstFolder = window.location.pathname.split("/")[1];';
         foreach ($courses_sence_2 as $course){
             $data_course = get_data_course_by_courseid($course->id);
             $text .=        '$("a[href*=\'/course/view.php?id='.$course->id.'\']:contains(\''.$course->fullname.'\')").remove(".if_block_sence_'.$course->id.'");';
             $text .=        '$("a[href*=\'/course/view.php?id='.$course->id.'\']:contains(\''.$course->fullname.'\')").append("<div style=\'margin-top:10px;font-size:12px;\' class=\'if_block_sence_'.$course->id.'\'>';
-            if(sence_validate_session($runalumno,$course->codsence)){
-                $text .=        '<form action=\""+prot+"//"+host+"/"+firstFolder+"/course/view.php?id='.$course->id.'\" method=\"post\">';
-                $text .=                '<input type=\"submit\" value=\"Seguir con el curso\">';
-            }else{
-                $text .=        '<form action=\"https://sistemas.sence.cl/rce/Registro/IniciarSesion\" method=\"post\">';
-                $text .=                '<input type=\"hidden\" value=\"'.$runotec.'\" name=\"RutOtec\">';
-                $text .=                '<input type=\"hidden\" value=\"'.$tokenotec.'\" name=\"Token\">';
-                $text .=                '<input type=\"hidden\" value=\"'.$course->codsence.'\" name=\"CodSence\">';
-                $text .=                '<input type=\"hidden\" value=\"'.$data_course['codcurso'].'\" name=\"CodigoCurso\">';
-                $text .=                '<input type=\"hidden\" value=\"'.$data_course['lineacap'].'\" name=\"LineaCapacitacion\">';
-                $text .=                '<input type=\"hidden\" value=\""+prot+"//"+host+"/"+firstFolder+"/blocks/if_sence_login/pages/exito.php\" name=\"UrlRetoma\">';
-                $text .=                '<input type=\"hidden\" value=\""+prot+"//"+host+"/"+firstFolder+"/blocks/if_sence_login/pages/error.php\" name=\"UrlError\">';
-                $text .=                '<input type=\"hidden\" value=\"'.$runalumno.'\" name=\"RunAlumno\">';
-                $text .=                '<input type=\"hidden\" value=\"'.$idsesionalumno.'\" name=\"IdSesionAlumno\">';
-                if(is_registered_in_course($userid,$course->id)){
-                    $text .=                '<input type=\"submit\" value=\"Iniciar con SENCE\">';
+            if(is_only_student_in_course($userid,$course->id)){
+                //Posee solo el rol de estudiante y hace la verificación de la sesi+on
+                if(sence_validate_session($runalumno,$course->codsence)){
+                    //Continua su sesión iniciada sin logearse nuevamente en sence
+                    $text .=        '<form action=\""+prot+"//"+host+"/"+firstFolder+"/course/view.php?id='.$course->id.'\" method=\"post\">';
+                    $text .=                '<input type=\"submit\" value=\"Seguir con el curso\">';
                 }else{
-                    $text .=                '<input type=\"submit\" value=\"Iniciar con SENCE\" disabled=\"disabled\" title=\"No estas matriculado en este curso\">';
+                    //la sesión no es valida o se encuentra caducada por lo que se envía a sence para login
+                    $text .=        '<form action=\"https://sistemas.sence.cl/rcetest/Registro/IniciarSesion\" method=\"post\">';
+                    $text .=                '<input type=\"hidden\" value=\"'.$runotec.'\" name=\"RutOtec\">';
+                    $text .=                '<input type=\"hidden\" value=\"'.$tokenotec.'\" name=\"Token\">';
+                    $text .=                '<input type=\"hidden\" value=\"'.$course->codsence.'\" name=\"CodSence\">';
+                    $text .=                '<input type=\"hidden\" value=\"'.$data_course['codcurso'].'\" name=\"CodigoCurso\">';
+                    $text .=                '<input type=\"hidden\" value=\"'.$data_course['lineacap'].'\" name=\"LineaCapacitacion\">';
+                    $text .=                '<input type=\"hidden\" value=\""+prot+"//"+host+"/"+firstFolder+"/blocks/if_sence_login/pages/exito.php?type=login\" name=\"UrlRetoma\">';
+                    $text .=                '<input type=\"hidden\" value=\""+prot+"//"+host+"/"+firstFolder+"/blocks/if_sence_login/pages/error.php\" name=\"UrlError\">';
+                    $text .=                '<input type=\"hidden\" value=\"'.$runalumno.'\" name=\"RunAlumno\">';
+                    $text .=                '<input type=\"hidden\" value=\"'.$idsesionalumno.'\" name=\"IdSesionAlumno\">';
+                    if(is_registered_in_course($userid,$course->id)){
+                        //El estudiante se encuentra matriculado
+                        $text .=            '<input type=\"submit\" value=\"Iniciar con SENCE\">';
+                    }else{
+                        //El estudiante no se encuentra matriculado
+                        $text .=            '<input type=\"submit\" value=\"Iniciar con SENCE\" disabled=\"disabled\" title=\"No estas matriculado en este curso\">';
+                    }
                 }
-                
+            }else{
+                //el usuario no es estudiante o posee mas de un perfil en el curso
+                $text .=        '<form action=\""+prot+"//"+host+"/"+firstFolder+"/course/view.php?id='.$course->id.'\" method=\"post\">';
+                $text .=            '<input type=\"submit\" value=\"Ingresar al curso\">';
             }
+            
             $text .=        '");';
             $text .=        '$("a[href*=\'/course/view.php?id='.$course->id.'\']").removeAttr("href");';            
         }
             $text .=    '});';
+            $text .=    'var url = "blocks/if_sence_login/model/sence_data_filter.php";';
         $text .=    '$("#course-selector").change(function(){';
         $text .=        'if($("#course-selector").val()!=="-1"){';
         $text .=            'var id = $("#course-selector").val();';
         $text .=            '$.ajax({';
-        $text .=                'url: firstFolder+"/blocks/if_sence_login/model/sence_data_filter.php",';
+        $text .=                'url: url,';
         $text .=                'type: "POST",';
         $text .=                'data: {id:id,runalumno:"'.$runalumno.'"}';
         $text .=            '}).done(function(js) {';
@@ -157,14 +169,14 @@ class block_if_sence_login extends block_base {
         $text  .= '<h5>Sesiones iniciadas</h5>';
         $count = 1;
         foreach($courses_user as $c_u){
-            $text  .= '<form name="course_list_form_'.$count.'" action="https://sistemas.sence.cl/rce/Registro/CerrarSesion" method="post">';
+            $text  .= '<form name="course_list_form_'.$count.'" action="https://sistemas.sence.cl/rcetest/Registro/CerrarSesion" method="post">';
             $text .=    '<p>'.$c_u->nombrecurso.'  <input type="submit" value="Cerrar"/></p>';
             $text .=    '<input type="hidden" value="'.$runotec.'" name="RutOtec">';
             $text .=    '<input type="hidden" value="'.$tokenotec.'" name="Token">';
             $text .=    '<input type="hidden" value="'.$c_u->codsence.'" name="CodSence">';
             $text .=    '<input type="hidden" value="'.$c_u->codcurso.'" name="CodigoCurso">';
             $text .=    '<input type="hidden" value="'.$c_u->lineacap.'" name="LineaCapacitacion">';
-            $text .=    '<input type="hidden" value="'.$new_link.'blocks/if_sence_login/pages/exito.php" name="UrlRetoma">';
+            $text .=    '<input type="hidden" value="'.$new_link.'blocks/if_sence_login/pages/exito.php?type=logout" name="UrlRetoma">';
             $text .=    '<input type="hidden" value="'.$new_link.'blocks/if_sence_login/pages/error.php" name="UrlError">';
             $text .=    '<input type="hidden" value="'.$runalumno.'" name="RunAlumno">';
             $text .=    '<input type="hidden" value="'.$idsesionalumno.'" name="IdSesionAlumno">';
@@ -176,8 +188,8 @@ class block_if_sence_login extends block_base {
     }
     
     public function get_missing_data(){
-        $text  = '<h5>Hola. Algo falta!</h5>';
-        $text  = '<p>Favor revisar formulario de Informaci&oacute;n OTEC.</p>';
+        $text  = '<h5>Hola. Falta algo!</h5>';
+        $text  = '<p>Por favor, echa un vistazo al formulario de Informaci&oacute;n OTEC.</p>';
         
         return $text;
     }
