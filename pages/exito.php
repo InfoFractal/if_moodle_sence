@@ -10,11 +10,10 @@ $PAGE->set_title("Login SENCE exitoso");
 $PAGE->set_heading("Pronto seras redireccionado");
 $PAGE->set_url($CFG->wwwroot.'/blocks/if_sence_login/pages/exito.php');
 $isLogoutURL = false;
-if (strpos($_SERVER['HTTP_REFERER'], "Logout") !== false){
+$type = $_GET['type'];
+if($type == "logout"){
     $isLogoutURL = true;
 }
-
-
 $CodSence =          $_POST['CodSence'];
 $CodigoCurso =       $_POST['CodigoCurso'];
 $IdSesionAlumno =    $_POST['IdSesionAlumno'];
@@ -44,13 +43,13 @@ if (strval(sesskey()) == strval($IdSesionAlumno)){
       #curso es valido, agregando datos de sesion a la db 
       sence_invalidate_session($RunAlumno,$CodSence);
       $idcurso = array_values($courseIds)[0]->instanceid;
-      $url = $CFG->wwwroot."/?redirect=0".$idcurso;
+      $url = $CFG->wwwroot;
       $text .= "<script>";
       $text .= "  setTimeout(function(){";
       $text .= "  window.location.href = '".$url."'";
       $text .= "  },5000);";
       $text .= "</script>";
-      $text .= "<p> La sesión ha sido cerrada. Seras redireccionado despues de 5 segundos.<p>";
+      $text .= "<p> La sesion ha sido cerrada. Seras redireccionado despues de 5 segundos.<p>";
   }else if (count($courseIds) == 1 && $isLogoutURL == false){ #un curso por codigo sence
       #curso es valido, agregando datos de sesion a la db 
       $IdSesionSence =     $_POST['IdSesionSence'];
