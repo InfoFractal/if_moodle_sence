@@ -44,18 +44,17 @@ function is_only_student_in_course($uid,$cid){
     }
     
     if(count($roles_arr)>1){
-        echo "mas de uno\n";
+        //
     }else if(count($roles_arr)==1){
-        echo "hay uno registro\n";
+       // 
         if($roles_arr[0]=="student"){
-            echo "hay uno registro y es estudiante\n";
+            //
             return true;
         }else{
-            echo "hay uno registro y no es estudiante\n";
+            //
             return false;
         }
     }else{
-        echo "no hay registro\n";
         return false;
     }
     return false;
