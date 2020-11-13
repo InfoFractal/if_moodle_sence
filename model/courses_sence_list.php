@@ -55,7 +55,7 @@ function is_only_student_in_course($uid,$cid){
             return false;
         }
     }else{
-        return false;
+        return true;
     }
     return false;
 }
