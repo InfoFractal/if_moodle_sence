@@ -1,7 +1,7 @@
 
 <h1 align="center">
   <br>
-  <a href="infofractal.io"><img src="https://i.postimg.cc/x1VFSc3T/IF-moodle-sence.png" alt="Sence Plugin para Moodle" width="750"></a>
+  <a href="https://infofractal.io/es"><img src="https://i.postimg.cc/x1VFSc3T/IF-moodle-sence.png" alt="Sence Plugin para Moodle" width="750"></a>
   <br>
   Extensión para integración de Moodle a Sence
   <br>
