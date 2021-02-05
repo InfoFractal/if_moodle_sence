@@ -36,13 +36,26 @@ function is_registered_in_course($uid,$cid){
 }
 function is_only_student_in_course($uid,$cid){
     global $DB;
-    $query = "select c.fullname,r.shortname,u.firstname from {course} c, {user} u, {role} r, {role_assignments} ra where ra.roleid = r.id and ra.userid = u.id and u.id = ? and c.id = ?";
+    //$query = "select c.fullname,r.shortname,u.firstname from {course} c, {user} u, {role} r, {role_assignments} ra where ra.roleid = r.id and ra.userid = u.id and u.id = ? and c.id = ?";
+    $query = "select c.id, c.fullname,r.shortname,u.firstname from {course} c, {user} u, {role} r, {role_assignments} ra,{enrol} e, {user_enrolments} ue where ra.roleid = r.id and ra.userid = u.id and ue.userid = u.id and ue.enrolid = e.id and e.roleid = r.id and e.courseid = c.id and u.id = ? and c.id = ?";
     $result = $DB->get_recordset_sql($query, [$uid,$cid]); 
     $roles_arr = [];
+    $id ="";$shnm = "";
     foreach($result as $r){
-        array_push($roles_arr,$r->shortname);
+        if($id == $r->id){
+            //echo "id igual\n";
+            if($shnm !=$r->shortname){
+                //echo "id igual y rol distinto\n";
+                array_push($roles_arr,$r->shortname);
+            }
+        }else{
+            //echo "id distinto\n";
+            array_push($roles_arr,$r->shortname);
+        }
+        $id = $r->id;
+        $shnm = $r->shortname;
     }
-    
+    //var_dump($roles_arr);die;
     if(count($roles_arr)>1){
         //
     }else if(count($roles_arr)==1){
@@ -62,8 +75,8 @@ function is_only_student_in_course($uid,$cid){
 function get_courses_data_from_alumnoid($id){
     global $DB;
     $data_array = [];
-    $query = "select u.username,u.id as 'userid',c.id as 'courseid',c.fullname, cfd.value as 'codsence',bifl.runalumno,bifl.idsesionsence from {course} c,{customfield_data} cfd, {customfield_field} cff,{user} u,{enrol} e,{user_enrolments} ue,{block_if_sence_login} bifl where cff.shortname=? and cff.id = cfd.fieldid and cfd.instanceid = c.id and cfd.value<>'' and e.courseid = c.id and e.id = ue.enrolid and ue.userid = u.id and u.id = ? and bifl.codsence = cfd.value and bifl.idsesionalumno <>''";
-    $result = $DB->get_recordset_sql($query, ['codsence',$id]); 
+    $query = "select u.username,u.id as 'userid',c.id as 'courseid',c.fullname, cfd.value as 'codsence',bifl.runalumno,bifl.idsesionsence from {course} c,{customfield_data} cfd, {customfield_field} cff,{user} u,{enrol} e,{user_enrolments} ue,{block_if_sence_login} bifl,{user_info_field} uif,{user_info_data} uidata where cff.shortname=? and uif.shortname=? and cff.id = cfd.fieldid and cfd.instanceid = c.id and cfd.value<>'' and e.courseid = c.id and e.id = ue.enrolid and ue.userid = u.id and u.id = uidata.userid and uif.id = uidata.fieldid and uidata.data = bifl.runalumno and bifl.codsence = cfd.value and bifl.idsesionalumno <>'' and u.id = ?";
+    $result = $DB->get_recordset_sql($query, ['codsence','runalumno',$id]); 
     foreach($result as $r){
         $data = new stdClass();
         $data_ = get_data_course_by_courseid($r->courseid);
