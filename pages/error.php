@@ -15,7 +15,7 @@ switch ($cod_error){
         $error_msg = "Contraseña incorrecta, intente otra vez.";
         break;
     case(200):
-        $error_msg = "POST incorrecto, contactar soporte.";
+        $error_msg = "POST incorrecto, tiene uno o más parámetros mandatorios sin información o mal escritos.";
         break;
     case(201):
         $error_msg = "URL retorno/error vacia, contactar soporte.";
@@ -27,22 +27,22 @@ switch ($cod_error){
         $error_msg = "URL de Error tiene formato incorrecto, contactar soporte.";
         break;
     case(204):
-        $error_msg = "Código SENCE inválido, contactar soporte.";
+        $error_msg = "Código SENCE inválido, debe tener al menos 10 caracteres.";
         break;
     case(205):
-        $error_msg = "Código curso inválido, contactar soporte.";
+        $error_msg = "Código curso inválido, debe tener al menos 7 caracteres.";
         break;
     case(206):
-        $error_msg = "Linea capacitación incorrecta, contactar soporte.";
+        $error_msg = "Linea capacitación incorrecta.";
         break;
     case(207):
         $error_msg = "RUN Alumno con formato incorrecto, debe ser 12345678-9.";
         break;
     case(208):
-        $error_msg = "RUN Alumno no está autorizado.";
+        $error_msg = "RUN Alumno no está autorizado para realizar el curso.";
         break;
     case(209):
-        $error_msg = "RUN OTEC con formato incorrecto, debe ser 12345678-9, contactar soporte.";
+        $error_msg = "RUN OTEC con formato incorrecto, debe ser 12345678-9.";
         break;
     case(210):
         $error_msg = "Login expirado, el tiempo es de 180 segundos. Intente otra vez.";
@@ -54,26 +54,38 @@ switch ($cod_error){
         $error_msg = "Token OTEC expirado, contactar soporte.";
         break;
     case(300):
-        $error_msg = "Error interno, contactar soporte.";
+        $error_msg = "Error interno no clasificado, se debe reportar al SENCE con la mayor cantidad de antecedentes disponibles.";
         break;
     case(301):
-        $error_msg = "No se pudo registrar sesión, contactar soporte.";
+        $error_msg = "No se pudo registrar el ingreso o cierre de sesión. Esto ocurre cuando la Línea de Capacitación es incorrecta, o el Código de Curso es incorrecto";
         break;
     case(302):
-        $error_msg = "No se logró validar institución, contactar soporte.";
+        $error_msg = "No se pudo validar la información del Organismo, se debe reportar al SENCE con la mayor cantidad de antecedentes disponibles.";
         break;
     case(303):
-        $error_msg = "Token OTEC no existe, contactar soporte.";
+        $error_msg = "Token OTEC no existe o su formato es incorrecto.";
         break;
     case(304):
-        $error_msg = "No se pudo verificar el ingreso, contactar soporte.";
+        $error_msg = "No se pudo verificar los datos de ingreso, se debe reportar al SENCE con la mayor cantidad de antecedentes disponibles.";
         break;
     case(305):
-        $error_msg = "No se pudo registrar el ingreso, contactar soporte.";
+        $error_msg = "No se pudo registrar el ingreso, se debe reportar al SENCE con la mayor cantidad de antecedentes disponibles. ";
         break;
     case(306):
-        $error_msg = "Código curso no corresponde al código SENCE, contactar soporte.";
+        $error_msg = "El código curso no corresponde al código SENCE.";
         break;
+    case(307):
+        $error_msg = "El curso no tiene modalidad E-learning.";
+        break;    
+    case(308):
+        $error_msg = "El Código curso no corresponde al RUT OTEC.";
+        break;
+    case(309):
+        $error_msg = "Las fechas de ejecución comunicadas para el Código Curso no corresponden a la fecha actual";
+        break;    
+    case(310):
+        $error_msg = "El Código Curso está en Estado terminado o anulado.";
+        break;        
     default:
         $error_msg = 'Error ' . $cod_error . ' desconocido, contactar soporte';
 }
