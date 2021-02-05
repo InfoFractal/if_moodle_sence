@@ -88,7 +88,10 @@ class block_if_sence_login extends block_base {
         $text .=    '<select id="course-selector">';
         $text .=    '<option value="-1">Seleccione...</option>';
         foreach ($courses_sence as $course){
-            $text .='<option value="'.$course->id.'">'.$course->fullname."</option>";
+            if (is_registered_in_course($userid,$course->id)){
+                $text .='<option value="'.$course->id.'">'.$course->fullname."</option>";
+            }
+            
         }
         $text .=    '</select>';
         $text .=    '<input type="hidden" value="'.$runotec.'" name="RutOtec">';
@@ -112,14 +115,14 @@ class block_if_sence_login extends block_base {
             $text .=        '$("a[href*=\'/course/view.php?id='.$course->id.'\']:contains(\''.$course->fullname.'\')").remove(".if_block_sence_'.$course->id.'");';
             $text .=        '$("a[href*=\'/course/view.php?id='.$course->id.'\']:contains(\''.$course->fullname.'\')").append("<div style=\'margin-top:10px;font-size:12px;\' class=\'if_block_sence_'.$course->id.'\'>';
             if(is_only_student_in_course($userid,$course->id)){
-                //Posee solo el rol de estudiante y hace la verificación de la sesi+on
+                //Posee solo el rol de estudiante y hace la verificaci贸n de la sesi+on
                 if(sence_validate_session($runalumno,$course->codsence)){
-                    //Continua su sesión iniciada sin logearse nuevamente en sence
+                    //Continua su sesi贸n iniciada sin logearse nuevamente en sence
                     $text .=        '<form action=\""+prot+"//"+host+"/"+firstFolder+"/course/view.php?id='.$course->id.'\" method=\"post\">';
                     $text .=                '<input type=\"submit\" value=\"Seguir con el curso\">';
                 }else{
-                    //la sesión no es valida o se encuentra caducada por lo que se envía a sence para login
-                    $text .=        '<form action=\"https://sistemas.sence.cl/rce/Registro/IniciarSesion\" method=\"post\">';
+                    //la sesi贸n no es valida o se encuentra caducada por lo que se env铆a a sence para login
+                    $text .=        '<form action=\"https://sistemas.sence.cl/rcetest/Registro/IniciarSesion\" method=\"post\">';
                     $text .=                '<input type=\"hidden\" value=\"'.$runotec.'\" name=\"RutOtec\">';
                     $text .=                '<input type=\"hidden\" value=\"'.$tokenotec.'\" name=\"Token\">';
                     $text .=                '<input type=\"hidden\" value=\"'.$course->codsence.'\" name=\"CodSence\">';
@@ -146,8 +149,8 @@ class block_if_sence_login extends block_base {
             $text .=        '");';
             $text .=        '$("a[href*=\'/course/view.php?id='.$course->id.'\']").removeAttr("href");';            
         }
-            $text .=    '});';
-            $text .=    'var url = "blocks/if_sence_login/model/sence_data_filter.php";';
+        $text .=    '});';
+        $text .=    'var url = "blocks/if_sence_login/model/sence_data_filter.php";';
         $text .=    '$("#course-selector").change(function(){';
         $text .=        'if($("#course-selector").val()!=="-1"){';
         $text .=            'var id = $("#course-selector").val();';
@@ -164,12 +167,13 @@ class block_if_sence_login extends block_base {
         $text .=        '}';
         $text .='   });';
         $text .='</script>';
-        $text .= '<hr>';
+        //$text .= '<hr>';
         $courses_user = get_courses_data_from_alumnoid($userid);
+        //var_dump($userid);die;
         $text  .= '<h5>Sesiones iniciadas</h5>';
         $count = 1;
         foreach($courses_user as $c_u){
-            $text  .= '<form name="course_list_form_'.$count.'" action="https://sistemas.sence.cl/rce/Registro/CerrarSesion" method="post">';
+            $text  .= '<form name="course_list_form_'.$count.'" action="https://sistemas.sence.cl/rcetest/Registro/CerrarSesion" method="post">';
             $text .=    '<p>'.$c_u->nombrecurso.'  <input type="submit" value="Cerrar"/></p>';
             $text .=    '<input type="hidden" value="'.$runotec.'" name="RutOtec">';
             $text .=    '<input type="hidden" value="'.$tokenotec.'" name="Token">';

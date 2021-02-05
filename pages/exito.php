@@ -13,6 +13,7 @@ $isLogoutURL = false;
 $type = $_GET['type'];
 if($type == "logout"){
     $isLogoutURL = true;
+    $PAGE->set_title("Login SENCE exitoso");
 }
 $CodSence =          $_POST['CodSence'];
 $CodigoCurso =       $_POST['CodigoCurso'];
