@@ -37,7 +37,7 @@ function is_registered_in_course($uid,$cid){
 function is_only_student_in_course($uid,$cid){
     global $DB;
     //$query = "select c.fullname,r.shortname,u.firstname from {course} c, {user} u, {role} r, {role_assignments} ra where ra.roleid = r.id and ra.userid = u.id and u.id = ? and c.id = ?";
-    $query = "select c.id, c.fullname,r.shortname,u.firstname from {course} c, {user} u, {role} r, {role_assignments} ra,{enrol} e, {user_enrolments} ue where ra.roleid = r.id and ra.userid = u.id and ue.userid = u.id and ue.enrolid = e.id and e.roleid = r.id and e.courseid = c.id and u.id = ? and c.id = ?";
+    $query = "select c.id, c.fullname,r.shortname,u.firstname from {course} c, {user} u, {role} r, {role_assignments} ra,{enrol} e, {user_enrolments} ue where ra.roleid = r.id and ra.userid = u.id and ue.userid = u.id and ue.enrolid = e.id and e.courseid = c.id and u.id = ? and c.id = ?";
     $result = $DB->get_recordset_sql($query, [$uid,$cid]); 
     $roles_arr = [];
     $id ="";$shnm = "";
