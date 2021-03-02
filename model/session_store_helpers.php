@@ -83,3 +83,12 @@ function sence_validate_session($runalumno,$codsence){
   return false;
 }
 
+function gen_redir($url,$msg){
+  $text .= "<script>";
+  $text .= "  setTimeout(function(){";
+  $text .= "  window.location.href = '".$url."'";
+  $text .= "  },5000);";
+  $text .= "</script>";
+  $text .= $msg;
+  return $text;
+}

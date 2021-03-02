@@ -111,17 +111,17 @@ class block_if_sence_login extends block_base {
             $text .=    'var prot = document.location.protocol;';
             $text .=    'var host = document.location.hostname;';
         foreach ($courses_sence_2 as $course){
-            $data_course = get_data_course_by_courseid($course->id);
+            $data_course = get_data_course_by_courseid($course->id,$userid);
             $text .=        '$("a[href*=\'/course/view.php?id='.$course->id.'\']:contains(\''.$course->fullname.'\')").remove(".if_block_sence_'.$course->id.'");';
             $text .=        '$("a[href*=\'/course/view.php?id='.$course->id.'\']:contains(\''.$course->fullname.'\')").append("<div style=\'margin-top:10px;font-size:12px;\' class=\'if_block_sence_'.$course->id.'\'>';
             if(is_only_student_in_course($userid,$course->id)){
-                //Posee solo el rol de estudiante y hace la verificaci贸n de la sesi+on
+                //Posee solo el rol de estudiante y hace la verificacion de la sesi+on
                 if(sence_validate_session($runalumno,$course->codsence)){
-                    //Continua su sesi贸n iniciada sin logearse nuevamente en sence
+                    //Continua su sesion iniciada sin logearse nuevamente en sence
                     $text .=        '<form action=\""+prot+"//"+host+"/"+firstFolder+"/course/view.php?id='.$course->id.'\" method=\"post\">';
                     $text .=                '<input type=\"submit\" value=\"Seguir con el curso\">';
                 }else{
-                    //la sesi贸n no es valida o se encuentra caducada por lo que se env铆a a sence para login
+                    //la sesion no es valida o se encuentra caducada por lo que se env铆a a sence para login
                     $text .=        '<form action=\"https://sistemas.sence.cl/rce/Registro/IniciarSesion\" method=\"post\">';
                     $text .=                '<input type=\"hidden\" value=\"'.$runotec.'\" name=\"RutOtec\">';
                     $text .=                '<input type=\"hidden\" value=\"'.$tokenotec.'\" name=\"Token\">';

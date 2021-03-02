@@ -27,7 +27,9 @@
 require_once(dirname(__FILE__).'/../../../config.php');
 require_once(__DIR__ . '/../model/session_store_helpers.php');
 global $DB;
+global $USER;
 
+$uid = $USER->id;
 $courseid = $_POST['id'];
 $runalumno = $_POST['runalumno'];
 
@@ -53,6 +55,13 @@ $codcursoid = $DB->get_record('customfield_field', ['shortname' => 'codcurso'],'
 $codcurso = $DB->get_record('customfield_data', 
         ['fieldid' => $codcursoid->id,'instanceid' => intval($courseid)],
         'value');
+
+//Obtener codigo curso desde los grupos, en caso que alumno este registrado en algun grupo se usara el código curso en el campo descripción.
+$query = "SELECT description FROM {groups_members} INNER JOIN {groups} WHERE {groups_members}.groupid = {groups}.id AND userid = ".$uid." AND courseid = '".$courseid."'"; 
+$courseIds = $DB->get_records_sql($query);
+if(count($courseIds) == 1){
+  $codcurso->value = array_values($courseIds)[0]->description;
+}
 
 echo '$("#cod-sence").val("'.$codsence->value.'");';
 echo '$("#linea-cap").val("'.$lineacap->value.'");';
