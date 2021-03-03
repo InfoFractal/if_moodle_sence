@@ -60,7 +60,10 @@ $codcurso = $DB->get_record('customfield_data',
 $query = "SELECT description FROM {groups_members} INNER JOIN {groups} WHERE {groups_members}.groupid = {groups}.id AND userid = ".$uid." AND courseid = '".$courseid."'"; 
 $courseIds = $DB->get_records_sql($query);
 if(count($courseIds) == 1){
-  $codcurso->value = array_values($courseIds)[0]->description;
+    $tmp = array_values($courseIds)[0]->description;
+    if(is_numeric($tmp)){
+        $codcurso->value = $tmp;
+    }
 }
 
 echo '$("#cod-sence").val("'.$codsence->value.'");';
