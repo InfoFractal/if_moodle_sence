@@ -43,7 +43,7 @@ if (strval(sesskey()) == strval($IdSesionAlumno)){
   $query = "SELECT instanceid,charvalue FROM {customfield_data} WHERE fieldid = '".$customFields["codcurso"]."' AND charvalue = '".$CodigoCurso."'";
   $courseIds = $DB->get_records_sql($query);
   #Buscaremos si el usuario esta registrado en algun grupo interno de alguno de los cursos
-  $Gquery = "SELECT courseid FROM {groups_members} INNER JOIN {groups} WHERE {groups_members}.groupid = {groups}.id AND userid = ".$uid." AND description = '".$CodigoCurso."'"; 
+  $Gquery = "SELECT courseid FROM {groups_members} INNER JOIN {groups} WHERE {groups_members}.groupid = {groups}.id AND userid = ".$uid." AND description LIKE '%".$CodigoCurso."%'"; 
   $GcourseIds = $DB->get_records_sql($Gquery);
   $cIdsCount = count($courseIds);
   $GcIdsCount = count($GcourseIds);
