@@ -113,10 +113,10 @@ function get_data_course_by_courseid($id,$uid=-1){
     }
     //busca codcurso en grupos
     if($uid != -1){
-        $query2a = "SELECT description FROM {groups_members} INNER JOIN {groups} WHERE {groups_members}.groupid = {groups}.id AND userid = ".$uid." AND courseid = '".$id."'"; 
+        $query2a = "SELECT name FROM {groups_members} INNER JOIN {groups} WHERE {groups_members}.groupid = {groups}.id AND userid = ".$uid." AND courseid = '".$id."'"; 
         $courseIds = $DB->get_records_sql($query2a);
         if(count($courseIds) == 1){
-            $tmp = strip_tags(array_values($courseIds)[0]->description);
+            $tmp = array_values($courseIds)[0]->name;
             if(is_numeric($tmp)){
                  $result['codcurso'] = $tmp;
             }
