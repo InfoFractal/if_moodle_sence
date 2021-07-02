@@ -73,6 +73,7 @@ class block_if_sence_login extends block_base {
     }
     public function get_body_plugin(){
         global $USER;
+        global $CFG;
         $runalumno = $USER->profile['runalumno'];
         $userid = $USER->id;
         
@@ -81,8 +82,6 @@ class block_if_sence_login extends block_base {
         $idsesionalumno = sesskey();
         $courses_sence = get_courses_sence_list();
         $courses_sence_2 = get_courses_sence_list();
-        #$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http")."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        #$new_link = str_replace("?redirect=0", "",$actual_link);
         $new_link = $CFG->wwwroot;
         $text  = '<h5>Selecciona el curso que deseas</h5>';
         $text .= '<form method="post" id="form-sence">';
@@ -181,8 +180,8 @@ class block_if_sence_login extends block_base {
             $text .=    '<input type="hidden" value="'.$c_u->codsence.'" name="CodSence">';
             $text .=    '<input type="hidden" value="'.$c_u->codcurso.'" name="CodigoCurso">';
             $text .=    '<input type="hidden" value="'.$c_u->lineacap.'" name="LineaCapacitacion">';
-            $text .=    '<input type="hidden" value="'.$new_link.'blocks/if_sence_login/pages/exito.php?type=logout" name="UrlRetoma">';
-            $text .=    '<input type="hidden" value="'.$new_link.'blocks/if_sence_login/pages/error.php" name="UrlError">';
+            $text .=    '<input type="hidden" value="'.$new_link.'/blocks/if_sence_login/pages/exito.php?type=logout" name="UrlRetoma">';
+            $text .=    '<input type="hidden" value="'.$new_link.'/blocks/if_sence_login/pages/error.php" name="UrlError">';
             $text .=    '<input type="hidden" value="'.$runalumno.'" name="RunAlumno">';
             $text .=    '<input type="hidden" value="'.$idsesionalumno.'" name="IdSesionAlumno">';
             $text .=    '<input type="hidden" value="'.$c_u->idsesionsence.'" name="IdSesionSence"><br>';
