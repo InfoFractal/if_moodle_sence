@@ -85,7 +85,13 @@ switch ($cod_error){
         break;    
     case(310):
         $error_msg = "El Código Curso está en Estado terminado o anulado.";
-        break;        
+        break;  
+    case(311):
+        $error_msg = "Run ingresado en el Login de Clave Única no corresponde con Run alumno informado por el ejecutor";
+        break;    
+    case(312):
+        $error_msg = "No se pudo completar la autenticación con Clave Única.";
+        break;              
     default:
         $error_msg = 'Error ' . $cod_error . ' desconocido, contactar soporte';
 }
