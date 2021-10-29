@@ -147,7 +147,8 @@ class block_if_sence_login extends block_base {
             }
             
             $text .=        '");';
-            $text .=        '$("a[href*=\'/course/view.php?id='.$course->id.'\']").removeAttr("href");';            
+            $text .=        'var coursebox = $(".fp-coursebox");';
+            $text .=        '$("a[href*=\'/course/view.php?id='.$course->id.'\']",coursebox).removeAttr("href");';            
         }
         $text .=    '});';
         $text .=    'var url = "blocks/if_sence_login/model/sence_data_filter.php";';
